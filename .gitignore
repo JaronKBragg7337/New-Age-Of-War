@@ -1,0 +1,18 @@
+# Unreal Engine build products and local editor state
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vs/
+*.sln
+*.VC.db
+*.VC.opendb
+
+# IDE and operating-system state
+.idea/
+.vscode/
+*.user
+*.suo
+Thumbs.db
+Desktop.ini

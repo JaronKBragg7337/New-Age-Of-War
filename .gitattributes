@@ -1,0 +1,4 @@
+# Keep source and configuration files consistently diffable.
+* text=auto eol=lf
+*.uasset binary
+*.umap binary

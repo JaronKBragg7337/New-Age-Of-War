@@ -1,0 +1,14 @@
+name: Validate live code
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  no-contractions:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate live C++ and configuration text
+        shell: pwsh
+        run: ./scripts/Test-NoContractions.ps1
