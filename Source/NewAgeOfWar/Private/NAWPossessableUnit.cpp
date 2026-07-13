@@ -74,6 +74,17 @@ void ANAWPossessableUnit::Look(const FVector2D& Input)
     AddControllerPitchInput(Input.Y);
 }
 
+void ANAWPossessableUnit::StartFiring()
+{
+    bWantsToFire = true;
+    FireWeapon();
+}
+
+void ANAWPossessableUnit::StopFiring()
+{
+    bWantsToFire = false;
+}
+
 void ANAWPossessableUnit::FireWeapon()
 {
     if (!bIsAlive || !bCanFire || !Controller)
@@ -92,6 +103,13 @@ void ANAWPossessableUnit::FireWeapon()
     const FVector End = ViewLocation + ViewRotation.Vector() * WeaponRange;
     if (GetWorld()->LineTraceSingleByChannel(Hit, ViewLocation, End, ECC_Visibility, QueryParams) && Hit.GetActor())
     {
+        if (const ANAWPossessableUnit* HitUnit = Cast<ANAWPossessableUnit>(Hit.GetActor()))
+        {
+            if (HitUnit->IsFriendly() == IsFriendly())
+            {
+                return;
+            }
+        }
         UGameplayStatics::ApplyDamage(Hit.GetActor(), WeaponDamage, Controller, this, UDamageType::StaticClass());
     }
 }
@@ -104,6 +122,7 @@ void ANAWPossessableUnit::Eliminate()
     }
 
     bIsAlive = false;
+    bWantsToFire = false;
     Health = 0.0f;
     Movement->StopMovementImmediately();
     Movement->SetComponentTickEnabled(false);
@@ -127,4 +146,8 @@ void ANAWPossessableUnit::OnUnitDeath_Implementation()
 void ANAWPossessableUnit::ResetFire()
 {
     bCanFire = true;
+    if (bWantsToFire)
+    {
+        FireWeapon();
+    }
 }

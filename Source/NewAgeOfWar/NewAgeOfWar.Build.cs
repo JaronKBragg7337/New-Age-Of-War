@@ -7,7 +7,7 @@ public class NewAgeOfWar : ModuleRules
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
         PublicDependencyModuleNames.AddRange(new[]
         {
-            "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput"
+            "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "Landscape"
         });
     }
 }

@@ -6,6 +6,9 @@
 
 class UInputAction;
 class UInputMappingContext;
+class UNAWBuildingPlacementComponent;
+class UNAWResourceWalletComponent;
+class ANAWBuildableStructure;
 class ANAWPossessableUnit;
 class ANAWStrategicPawn;
 struct FInputActionValue;
@@ -20,6 +23,7 @@ public:
     ANAWPlayerController();
 
     virtual void BeginPlay() override;
+    virtual void Tick(float DeltaSeconds) override;
     virtual void SetupInputComponent() override;
 
     /** Called by a possessed unit when its health reaches zero. */
@@ -30,6 +34,12 @@ public:
 
     UFUNCTION(BlueprintPure, Category = "Possession")
     bool IsInRTSView() const;
+
+    UFUNCTION(BlueprintPure, Category = "Economy")
+    UNAWResourceWalletComponent* GetResourceWallet() const { return ResourceWallet; }
+
+    UFUNCTION(BlueprintPure, Category = "Building")
+    UNAWBuildingPlacementComponent* GetBuildingPlacement() const { return BuildingPlacement; }
 
 protected:
     UPROPERTY(EditDefaultsOnly, Category = "Possession")
@@ -57,13 +67,42 @@ private:
     UPROPERTY()
     TObjectPtr<UInputAction> DebugKillAction;
 
+    UPROPERTY()
+    TObjectPtr<UInputAction> RTSLookAction;
+
+    UPROPERTY()
+    TObjectPtr<UInputAction> BuildBarracksAction;
+
+    UPROPERTY()
+    TObjectPtr<UInputAction> BuildDronePadAction;
+
+    UPROPERTY()
+    TObjectPtr<UInputAction> RotateBuildingAction;
+
+    UPROPERTY(VisibleAnywhere, Category = "Economy")
+    TObjectPtr<UNAWResourceWalletComponent> ResourceWallet;
+
+    UPROPERTY(VisibleAnywhere, Category = "Building")
+    TObjectPtr<UNAWBuildingPlacementComponent> BuildingPlacement;
+
     FTimerHandle DeathReturnTimer;
+    bool bRTSLookHeld = false;
+    float PlacementYawDegrees = 0.0f;
 
     void TryPossessUnitUnderCursor();
     void PossessUnit(ANAWPossessableUnit* Unit);
     void HandleMove(const FInputActionValue& Value);
     void HandleLook(const FInputActionValue& Value);
-    void HandlePrimaryAction();
+    void HandlePrimaryStarted();
+    void HandlePrimaryCompleted();
+    void HandleRTSLookStarted();
+    void HandleRTSLookCompleted();
     void HandleDebugKill();
+    void HandleBuildBarracks();
+    void HandleBuildDronePad();
+    void HandleRotateBuilding();
+    void HandleEscape();
+    void StartBuildingPlacement(TSubclassOf<ANAWBuildableStructure> BuildingClass);
+    void UpdateBuildingPlacement();
     void ConfigureInputMode(bool bRTSMode);
 };

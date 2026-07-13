@@ -4,6 +4,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "NAWGameMode.generated.h"
 
+class ANAWResourcePoint;
+
 /**
  * Starts a self-contained test arena on the Engine Entry map. Replace this
  * runtime arena with authored landscape maps when environment work begins.
@@ -21,4 +23,8 @@ protected:
 
 private:
     void SpawnTestArena();
+    void ActivateResourceGeneration();
+
+    UPROPERTY()
+    TArray<TObjectPtr<ANAWResourcePoint>> RuntimeResourcePoints;
 };

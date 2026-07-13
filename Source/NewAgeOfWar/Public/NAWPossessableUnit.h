@@ -26,6 +26,8 @@ public:
 
     void Move(const FVector2D& Input);
     void Look(const FVector2D& Input);
+    void StartFiring();
+    void StopFiring();
     void FireWeapon();
     void Eliminate();
 
@@ -77,6 +79,7 @@ protected:
 private:
     bool bIsAlive = true;
     bool bCanFire = true;
+    bool bWantsToFire = false;
     FTimerHandle FireCooldownTimer;
 
     void ResetFire();
